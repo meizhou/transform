@@ -8,8 +8,9 @@ $(function() {
         rotate: 'deg',
         scale: '',
         skew: 'deg',
-        perspective:'px'
+        perspective: 'px'
     };
+
     function isXYZ(key) {
         var lastCode = key.charAt(key.length - 1);
         if (lastCode == 'X' || lastCode == 'Y' || lastCode == 'Z') {
@@ -22,6 +23,18 @@ $(function() {
         _default: {
             duration: 1000,
             easing: 'ease'
+        },
+        init: function() {
+            if (arguments[0] == 'stop') {
+                var that = this;
+                var _run = function(next) {
+                    that.stop();
+                    next();
+                }
+                $(this.$el).queue(_run);
+            } else {
+                this.run.apply(this, arguments);
+            };
         },
         run: function(properties, duration, easing, callback) {
             callback = (typeof(callback) === 'function') ? callback : (typeof(easing) === 'function' ? easing : (typeof(duration) === 'function' ? duration : function() {}))
@@ -71,6 +84,7 @@ $(function() {
             $.each(this.prop, function(key, propval) {
                 tranProp.push(that.convertVal(key, propval));
             });
+            console.log('tag', tranProp.join(' '));
             return tranProp.join(' ');
         },
         convertVal: function(key, propval) {
@@ -81,8 +95,7 @@ $(function() {
                 newKey = key;
             };
             if (propCss[newKey] === undefined) {
-                if (key=='transformOrigin') {
-                };
+                if (key == 'transformOrigin') {};
                 $(this.$el).css(key, propval);
                 return '';
             } else {
@@ -91,6 +104,9 @@ $(function() {
                 }
                 return key + '(' + propval + propCss[newKey] + ')';
             };
+        },
+        stop: function() {
+            this.prop = {};
         },
         setter: {
             x: function(x) {
@@ -125,28 +141,28 @@ $(function() {
                 };
             },
             translate3d: function(x, y, z) {
-
+                this.translateX = x;
+                this.translateY = y ? y : 0;
+                this.translateZ = z ? z : 0;
             },
             rotate3d: function(x, y, z, angle) {
-
+                this.rotateX = x * angle;
+                this.rotateY = y * angle;
+                this.rotateZ = z * angle;
             },
             scale3d: function(x, y, z) {
-
+                this.scaleX = x;
+                this.scaleY = y ? y : x;
+                this.scaleZ = z ? z : x;
             },
             perspective: function(px) {
-                this.perspective=px;
+                this.perspective = px;
             },
-            origin: function(x,y) {
-                if (!y) {
-                    y=50+'%';
-                };
-                if (/^[0-9]+$/g.test(x)) {
-                    x=x+'px';
-                };
-                if (/^[0-9]+$/g.test(y)) {
-                    y=y+'px';
-                };
-                this.transformOrigin=x+''+y;
+            origin: function(x, y) {
+                !y ? y = 50 + '%' : y;
+                /^[0-9]+$/g.test(x) ? x = x + 'px' : x;
+                /^[0-9]+$/g.test(y) ? y = y + 'px' : y;
+                this.transformOrigin = x + '' + y;
             }
         }
     };
@@ -157,7 +173,7 @@ $(function() {
                 $(this).data('mz-transform', new Transform(this));
                 transform = $(this).data('mz-transform');
             }
-            transform.run(properties, duration, easing, callback);
+            transform.init(properties, duration, easing, callback);
         });
     }
 })
