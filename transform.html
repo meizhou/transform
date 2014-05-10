@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8"/>
+    <meta name="author" content="meizhou" />
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1-rc2/jquery.min.js"></script>
+    <script type="text/javascript" src="./transform.js"></script>
+    <title></title>
+    <style type="text/css">
+    #box{
+        background-color: #555;
+        width: 200px;
+        height:200px;
+        transform:perspective(500px) translate(20px,30px) rotate(-300deg);
+        -webkit-transform:perspective(500px) rotate(300deg);
+        transform:rotate(200deg);
+    }
+    #box1{
+        background-color: #555;
+        width: 200px;
+        height:200px;
+        transform:perspective(500px) translate(20px,30px) rotate(-300deg);
+        -webkit-transform:perspective(500px) rotate(300deg);
+        transform:rotate(200deg);
+    }
+    </style>
+</head>
+<body>
+<div class="rotate" id="box"></div>
+<div class="rotate" id="box1"></div>
+</body>
+</html>
+<script type="text/javascript">
+$(function(){
+    $('#box').css('transformOrigin',"10px 30px")
+    $('#box').transform({x:100});
+    $('#box').transform({origin:"100%,10px",rotate:100},2000,function(){
+        console.log('tag',"rotate");
+    });
+    $('#box').transform({perspective:100,rotateX:180},function(){
+        console.log('tag',"rotateX");
+    });
+    $('#box').transform({y:100},2000);
+
+    $('#box').transform({scale:2},1000,'ease1');
+    $('#box').transform({scale:1},1000,'ease1',function(){
+        console.log('tag',"scale");
+    });
+})
+</script>
