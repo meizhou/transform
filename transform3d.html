@@ -5,7 +5,7 @@
     <meta name="author" content="meizhou" />
     <meta content="" name="description">
     <meta content="" name="keywords">
-    <script src="http://cdn.bootcss.com/jquery/1.11.1-rc2/jquery.min.js"></script>
+    <script src="jquery.js"></script>
     <script type="text/javascript" src="./transform.js"></script>
     <title></title>
     <style type="text/css">
@@ -24,15 +24,41 @@
 <body>
 <div class="rotate" id="box"></div>
 <div class="rotate" id="box1"></div>
+<button class="stop">停止</button>
+<button class="start">停止</button>
 </body>
 </html>
 <script type="text/javascript">
 $(function(){
     $('#box').transform({perspective:1000,rotate3d:"1,1,1,180"},function(){
-        console.log('tag','one');
-    }).transform('stop');
-    $('#box').transform({translate3d:100}).transform('stop');
-    $('#box').transform({scale3d:'2,3,4'});
-    $('#box1').css('transform','scale3d(2)');
+        console.log('one');
+    }).transform('clear');
+    $('#box').transform({translate3d:100},function(){
+        console.log('two');
+    }).transform('clear');
+    $('#box').transform({scale3d:'2,3,4'},function(){
+        console.log('three');
+    });
+    $('#box').transform({translate3d:200},function(){
+        console.log('four');
+    });
+    $('#box').transform({perspective:1000,rotate3d:"1,1,1,180"},function(){
+        console.log('five');
+    });
+    $('#box').transform({delay:1000,translate3d:100},function(){
+        console.log('six');
+    });
+    $('#box').transform({scale3d:'2,3,4'},function(){
+        console.log('seven');
+    });
+    $('#box').transform({translate3d:200},function(){
+        console.log('8');
+    });
+    $('.stop').click(function(event) {
+        $('#box').transform('stop');
+    });
+    $('.start').click(function(event) {
+        $('#box').transform('start');
+    });
 })
 </script>

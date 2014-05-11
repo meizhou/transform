@@ -25,13 +25,8 @@ $(function() {
             easing: 'ease'
         },
         init: function() {
-            if (arguments[0] == 'stop') {
-                var that = this;
-                var _run = function(next) {
-                    that.stop();
-                    next();
-                }
-                $(this.$el).queue(_run);
+            if (typeof(arguments[0]) == 'string') {
+                this[arguments[0]].apply(this, arguments);
             } else {
                 this.run.apply(this, arguments);
             };
@@ -40,30 +35,29 @@ $(function() {
             callback = (typeof(callback) === 'function') ? callback : (typeof(easing) === 'function' ? easing : (typeof(duration) === 'function' ? duration : function() {}))
             duration = (typeof(duration) == 'number') ? duration : this._default.duration;
             easing = (typeof(easing) != 'string') ? this._default.easing : easing;
-            var $this = $(this.$el);
+            var $el = $(this.$el);
             var that = this;
             var _run = function(next) {
-                $this.css('transition-duration', duration + 'ms').css('transition-timing-function', easing);
+                $el.css('transition-duration', duration + 'ms').css('transition-timing-function', easing);
                 that.setProperties(properties);
-                /*$this.on('transitionEnd transitionend oTransitionEnd webkitTransitionEnd MSTransitionEnd',function(){
-});*/
                 window.setTimeout(function() {
+                    $el.css('transition-delay', 0 + 'ms');
                     callback();
                     next();
-                }, duration)
+                }, duration + (properties['delay'] ? properties['delay'] : 0))
             }
-            $this.queue(_run);
+            $el.queue(_run);
         },
         setProperties: function(properties) {
             var that = this;
             $.each(properties, function(key, val) {
                 if (key == 'delay') {
-                    $(that.$el).css('transition-delay', val);
+                    $(that.$el).css('transition-delay', val + 'ms');
                 } else {
                     that.set(key, val);
                 };
             });
-            $(this.$el).css('transform', this.getTranCss());
+            $(that.$el).css('transform', this.getTranCss());
         },
         set: function(key, val) {
             var tempArray = Array();
@@ -81,7 +75,7 @@ $(function() {
         getTranCss: function() {
             var that = this;
             var tranProp = Array();
-            $.each(this.prop, function(key, propval) {
+            $.each(that.prop, function(key, propval) {
                 tranProp.push(that.convertVal(key, propval));
             });
             console.log('tag', tranProp.join(' '));
@@ -105,8 +99,26 @@ $(function() {
                 return key + '(' + propval + propCss[newKey] + ')';
             };
         },
+        start: function() {
+            var $el = $(this.$el);
+            if (this.nowQueue) {
+                $el.queue(this.nowQueue);
+                $el.dequeue();
+            };
+        },
         stop: function() {
-            this.prop = {};
+            var $el = $(this.$el);
+            this.nowQueue = $el.queue();
+            $el.css('transition-duration', '0ms')
+                .css('transform', $el.css('transform')).clearQueue();
+        },
+        clear: function() {
+            var that = this;
+            var _run = function(next) {
+                that.prop = {};
+                next();
+            }
+            $(this.$el).queue(_run);
         },
         setter: {
             x: function(x) {
