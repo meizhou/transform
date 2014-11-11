@@ -14,46 +14,43 @@
         width: 200px;
         height:200px;
     }
-    #box1{
-        background-color: #555;
-        width: 200px;
-        height:200px;
-    }
     </style>
 </head>
 <body>
 <div class="rotate" id="box"></div>
-<div class="rotate" id="box1"></div>
 <button class="stop">停止</button>
-<button class="start">停止</button>
+<button class="start">开始</button>
 </body>
 </html>
 <script type="text/javascript">
 $(function(){
-    $('#box').transform({perspective:1000,rotate3d:"1,1,1,180"},function(){
-        console.log('one');
-    }).transform('clear');
-    $('#box').transform({translate3d:100},function(){
-        console.log('two');
-    }).transform('clear');
-    $('#box').transform({scale3d:'2,3,4'},function(){
-        console.log('three');
-    });
-    $('#box').transform({translate3d:200},function(){
-        console.log('four');
-    });
-    $('#box').transform({perspective:1000,rotate3d:"1,1,1,180"},function(){
-        console.log('five');
-    });
-    $('#box').transform({delay:1000,translate3d:100},function(){
-        console.log('six');
-    });
-    $('#box').transform({scale3d:'2,3,4'},function(){
-        console.log('seven');
-    });
-    $('#box').transform({translate3d:200},function(){
-        console.log('8');
-    });
+    $('#box').transform({ perspective : 1000, rotate3d : "1,1,1,180" }, function(){
+                            console.log('one');
+                        })
+            .transform('clear');
+            .transform({ translate3d : 100}, function(){
+                            console.log('two');
+                        })
+            .transform('clear');
+            .transform({ scale3d : '2,3,4' }, function(){
+                            console.log('three');
+                        });
+            .transform({ translate3d : 200 }, function(){
+                            console.log('four');
+                        });
+            .transform({ perspective : 1000, rotate3d : "1,1,1,180"}, function(){
+                            console.log('five');
+                        })
+
+            .transform({ delay:1000 , translate3d : 100 }, function(){
+                            console.log('six');
+                        })
+            .transform({ scale3d : '2,3,4'}, function(){
+                            console.log('seven');
+                        })
+            .transform({ translate3d : 200}, function(){
+                            console.log('eight');
+                        });
     $('.stop').click(function(event) {
         $('#box').transform('stop');
     });

@@ -78,7 +78,7 @@ $(function() {
             $.each(that.prop, function(key, propval) {
                 tranProp.push(that.convertVal(key, propval));
             });
-            console.log('tag', tranProp.join(' '));
+            console.log('当前的css3', tranProp.join(' '));
             return tranProp.join(' ');
         },
         convertVal: function(key, propval) {
